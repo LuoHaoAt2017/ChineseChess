@@ -1,0 +1,17 @@
+D:\github\hello-window-form\WinFormsApp\bin\Debug\net6.0-windows\WinFormsApp.exe
+D:\github\hello-window-form\WinFormsApp\bin\Debug\net6.0-windows\WinFormsApp.deps.json
+D:\github\hello-window-form\WinFormsApp\bin\Debug\net6.0-windows\WinFormsApp.runtimeconfig.json
+D:\github\hello-window-form\WinFormsApp\bin\Debug\net6.0-windows\WinFormsApp.dll
+D:\github\hello-window-form\WinFormsApp\bin\Debug\net6.0-windows\WinFormsApp.pdb
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.csproj.AssemblyReference.cache
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.Form1.resources
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.csproj.GenerateResource.cache
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.AssemblyInfoInputs.cache
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.AssemblyInfo.cs
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.csproj.CoreCompileInputs.cache
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.dll
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\refint\WinFormsApp.dll
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.pdb
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\WinFormsApp.genruntimeconfig.cache
+D:\github\hello-window-form\WinFormsApp\obj\Debug\net6.0-windows\ref\WinFormsApp.dll
