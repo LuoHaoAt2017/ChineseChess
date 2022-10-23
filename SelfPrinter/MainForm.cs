@@ -6,11 +6,11 @@ namespace SelfPrinter
 {
     public partial class MainForm : Form
     {
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage hospitalTab;
-        private System.Windows.Forms.TabPage docotorTab;
-        private System.Windows.Forms.TabPage nurseTab;
-        private System.Windows.Forms.TabPage patientTab;
+        private TabControl tabControl;
+        private TabPage hospitalTab;
+        private TabPage docotorTab;
+        private TabPage nurseTab;
+        private TabPage patientTab;
 
         public MainForm()
         {
@@ -20,11 +20,11 @@ namespace SelfPrinter
 
         public void InitializeTabControl()
         {
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.hospitalTab = new System.Windows.Forms.TabPage("医院");
-            this.docotorTab = new System.Windows.Forms.TabPage("医生");
-            this.nurseTab = new System.Windows.Forms.TabPage("护士");
-            this.patientTab = new System.Windows.Forms.TabPage("患者");
+            this.tabControl = new TabControl();
+            this.hospitalTab = new TabPage("医院");
+            this.docotorTab = new TabPage("医生");
+            this.nurseTab = new TabPage("护士");
+            this.patientTab = new TabPage("患者");
             this.tabControl.Size = new Size(600, 400);
 
             this.tabControl.Controls.Add(hospitalTab);
@@ -35,6 +35,7 @@ namespace SelfPrinter
             this.Controls.Add(this.tabControl);
 
             this.InitializeHospital();
+            this.InitializeDocotor();
         }
         /*
          * 医院页面
@@ -91,6 +92,46 @@ namespace SelfPrinter
          */
         public void InitializeDocotor()
         {
+            FlowLayoutPanel btnLayout = new FlowLayoutPanel();
+            btnLayout.FlowDirection = FlowDirection.LeftToRight;
+            btnLayout.AutoSize = true; // FlowLayoutPanel 根据其内容自动调整大小。
+            btnLayout.BorderStyle = BorderStyle.FixedSingle;
+            string[] texts = { "东风", "西风", "南风", "北风", "东南风", "西北风", "东北风", "西南风" };
+            for(int i = 0; i < texts.Length; i++)
+            {
+                Button button = new Button();
+                button.Cursor = Cursors.Hand;
+                button.Padding = new Padding(10, 5, 10, 5);
+                button.Text = texts[i];
+                button.AutoSize = true;
+                btnLayout.Controls.Add(button);
+            }
+            this.docotorTab.Controls.Add(btnLayout);
+
+            CheckedListBox checkedList = new CheckedListBox();
+            checkedList.Location = new Point(0, 150);
+            checkedList.AutoSize = true;
+            checkedList.CheckOnClick = true;
+            // ItemCheckEventHandler 是委托
+            checkedList.ItemCheck += new ItemCheckEventHandler(this.OnItemCheck);
+            for (int j = 0; j < texts.Length; j++)
+            {
+                checkedList.Items.Add(texts[j], false);
+            }
+            this.docotorTab.Controls.Add(checkedList);
+            this.docotorTab.AutoScroll = true;
+        }
+
+        public void OnItemCheck(object? sender, ItemCheckEventArgs args)
+        {
+            
+            if (args.NewValue == CheckState.Checked && args.CurrentValue == CheckState.Unchecked)
+            {
+                Console.WriteLine("正选");
+            } else
+            {
+                Console.WriteLine("反选");
+            }
         }
         /*
          * 护士页面
