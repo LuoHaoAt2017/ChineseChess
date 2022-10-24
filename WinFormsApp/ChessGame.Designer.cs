@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace WinFormsApp
 {
     // partial 关键字用于拆分一个类、一个结构、一个接口或一个方法的定义到两个或更多的文件中。
-    partial class Form1
+    partial class ChessGame
     {
         /// <summary>
         ///  Required designer variable.
@@ -39,12 +39,11 @@ namespace WinFormsApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.TestPanel();
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 900);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(this.ClientW, this.ClientH);
+            this.Name = "ChessBoard";
+            this.Text = "ChessBoard";
             this.ResumeLayout(false);
             this.PerformLayout();
         }

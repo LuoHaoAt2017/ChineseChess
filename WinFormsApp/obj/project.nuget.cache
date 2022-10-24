@@ -1,8 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "fJ8O6vrZp5kjcozJHoR23+rUVBVZEvBG5g7mAH4jGXD5Cg9IcEOO84ZAACxTFOdbhD+y6/zF42xqCejnQ7vnJw==",
+  "dgSpecHash": "Cfkm6IWE52jNg73KGzyjGui/BiiIDPrvH0evxIo91ziZlGcRzIKBwrsQNcju04/l2erqN0nqtMD0byLieJ328g==",
   "success": true,
   "projectFilePath": "D:\\github\\hello-window-form\\WinFormsApp\\WinFormsApp.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "C:\\Users\\hao.luo01\\.nuget\\packages\\wmplib\\1.0.0\\wmplib.1.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net6.0-windows7.0”还原包“WMPLib 1.0.0”。此包可能与项目不完全兼容。",
+      "libraryId": "WMPLib",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
 }
