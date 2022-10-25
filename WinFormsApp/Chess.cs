@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WinFormsApp
 {
-    internal class Chess
+    internal class Chess : ICloneable
     {
         private Role _role;
 
@@ -47,6 +47,7 @@ namespace WinFormsApp
             set { _role = value; }
             get { return _role; }   
         }
+        
         public Color Color
         {
             set
@@ -58,7 +59,7 @@ namespace WinFormsApp
                 return _color;
             }
         }
-
+        
         public Chess(string code, string name, Role role, Color color)
         {
             _code = code;
@@ -78,6 +79,13 @@ namespace WinFormsApp
                 return _positon;
 
 			}
+        }
+
+        public object Clone()
+        {
+			Random random = new Random();
+			Chess chess = new Chess(random.Next().ToString(), this._name, this._role, this._color);
+            return chess;
         }
     }
 }

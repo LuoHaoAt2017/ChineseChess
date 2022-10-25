@@ -1,27 +1,30 @@
+using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 
 namespace WinFormsApp
 {
-	enum Role
+	public enum Role
 	{
 		General, Premier, Guard, Horse, Chariot, Gun, Soldier
 	}
 
-	struct Location
+	public struct Location
 	{
-		public int rowIndex;
+		public int rowPos;
 
-		public int colIndex;
+		public int colPos;
 
-		public Location(int row, int col)
+		private int CellSize = 80;
+
+		public Location(int rowIndex, int colIndex)
 		{
-			rowIndex = row;
-			colIndex = col;
+			rowPos = rowIndex * CellSize;
+			colPos = colIndex * CellSize;
 		}
 	}
 
-	struct Option
+	public struct Option
 	{
 		public string name;
 		public Role role;
@@ -42,19 +45,17 @@ namespace WinFormsApp
 		private int RowCount = 9;
 		private int ColCount = 8;
 		private int CellSize = 80;
-
+		private int delta = 80 / 2;
+		private Panel panel = new Panel();
 		public ChessGame()
 		{
 			InitializeComponent();
 			InitializeBackground();
 			InitializeChessboard();
-			InitializeChessPieces();
 		}
 
 		private void InitializeBackground()
 		{
-			this.BackColor = Color.Black;
-			this.ForeColor = Color.Black;
 		}
 
 		/*
@@ -62,16 +63,15 @@ namespace WinFormsApp
          */
 		private void InitializeChessboard()
 		{
-			int W = this.ColCount * this.CellSize;
-			int H = this.RowCount * this.CellSize;
+			int W = this.ColCount * this.CellSize + CellSize;
+			int H = this.RowCount * this.CellSize + CellSize;
 			int px = (this.ClientW - W) / 2, py = (this.ClientH - H) / 2;
-			int borderW = 1;
-			Panel panel = new Panel();
-			panel.Size = new Size(W + borderW * 2, H + borderW * 2);
+			panel.Size = new Size(W, H);
 			panel.Location = new Point(px, py);
 			panel.BackColor = Color.Black;
 			panel.ForeColor = Color.White;
 			panel.Paint += new PaintEventHandler(this.DrawChessboard);
+			panel.Paint += new PaintEventHandler(this.DrawChessPiece);
 			this.Controls.Add(panel);
 		}
 
@@ -85,35 +85,36 @@ namespace WinFormsApp
 			int H = this.RowCount * this.CellSize;
 			Graphics ctx = e.Graphics;
 			Pen pen = new Pen(Color.White, 1);
+			
 			// 横向线
 			for (int i = 0; i < RowCount; i++)
 			{
-				ctx.DrawLine(pen, new Point(0, i * CellSize), new Point(W, i * CellSize));
+				ctx.DrawLine(pen, new Point(0 + delta, i * CellSize + delta), new Point(W + delta, i * CellSize + delta));
 			}
 			// 纵向线
 			for (int j = 0; j < ColCount; j++)
 			{
-				ctx.DrawLine(pen, new Point(j * CellSize, 0), new Point(j * CellSize, 4 * CellSize));
-				ctx.DrawLine(pen, new Point(j * CellSize, 5 * CellSize), new Point(j * CellSize, H));
+				ctx.DrawLine(pen, new Point(j * CellSize + delta, 0 + delta), new Point(j * CellSize + delta, 4 * CellSize + delta));
+				ctx.DrawLine(pen, new Point(j * CellSize + delta, 5 * CellSize + delta), new Point(j * CellSize + delta, H + delta));
 			}
 			// 斜向线
-			Point p1 = new Point(3 * CellSize, 0);
-			Point p2 = new Point(5 * CellSize, 2 * CellSize);
-			Point p3 = new Point(3 * CellSize, 2 * CellSize);
-			Point p4 = new Point(5 * CellSize, 0);
-			Point p5 = new Point(3 * CellSize, 7 * CellSize);
-			Point p6 = new Point(5 * CellSize, 9 * CellSize);
-			Point p7 = new Point(3 * CellSize, 9 * CellSize);
-			Point p8 = new Point(5 * CellSize, 7 * CellSize);
+			Point p1 = new Point(3 * CellSize + delta, 0 + delta);
+			Point p2 = new Point(5 * CellSize + delta, 2 * CellSize + delta);
+			Point p3 = new Point(3 * CellSize + delta, 2 * CellSize + delta);
+			Point p4 = new Point(5 * CellSize + delta, 0 + delta);
+			Point p5 = new Point(3 * CellSize + delta, 7 * CellSize + delta);
+			Point p6 = new Point(5 * CellSize + delta, 9 * CellSize + delta);
+			Point p7 = new Point(3 * CellSize + delta, 9 * CellSize + delta);
+			Point p8 = new Point(5 * CellSize + delta, 7 * CellSize + delta);
 			ctx.DrawLine(pen, p1, p2);
 			ctx.DrawLine(pen, p3, p4);
 			ctx.DrawLine(pen, p5, p6);
 			ctx.DrawLine(pen, p7, p8);
 			// 边线
-			Point topLeft = new Point(0, 0);
-			Point topRight = new Point(W, 0);
-			Point bottomLeft = new Point(0, H);
-			Point bottomRight = new Point(W, H);
+			Point topLeft = new Point(0 + delta, 0 + delta);
+			Point topRight = new Point(W + delta, 0 + delta);
+			Point bottomLeft = new Point(0 + delta, H + delta);
+			Point bottomRight = new Point(W + delta, H + delta);
 			ctx.DrawLine(pen, topLeft, topRight);
 			ctx.DrawLine(pen, bottomLeft, bottomRight);
 			ctx.DrawLine(pen, topLeft, bottomLeft);
@@ -122,25 +123,24 @@ namespace WinFormsApp
 			FontFamily fontFamily = new FontFamily("Arial");
 			Brush brush = new SolidBrush(Color.White);
 			Font font = new Font(fontFamily, 24, FontStyle.Bold);
-			ctx.DrawString("楚", font, brush, new PointF(1.25f * CellSize, 4.25f * CellSize));
-			ctx.DrawString("河", font, brush, new PointF(2.25f * CellSize, 4.25f * CellSize));
-			ctx.DrawString("汉", font, brush, new PointF(5.25f * CellSize, 4.25f * CellSize));
-			ctx.DrawString("界", font, brush, new PointF(6.25f * CellSize, 4.25f * CellSize));
+			ctx.DrawString("楚", font, brush, new PointF(1.25f * CellSize + delta, 4.25f * CellSize + delta));
+			ctx.DrawString("河", font, brush, new PointF(2.25f * CellSize + delta, 4.25f * CellSize + delta));
+			ctx.DrawString("汉", font, brush, new PointF(5.25f * CellSize + delta, 4.25f * CellSize + delta));
+			ctx.DrawString("界", font, brush, new PointF(6.25f * CellSize + delta, 4.25f * CellSize + delta));
 			// 十字花
 			Point[] points = new Point[]
 			{
 				new Point(1 * CellSize, 2 * CellSize),
 				new Point(0 * CellSize, 3 * CellSize),
 				new Point(2 * CellSize, 3 * CellSize),
-
+				new Point(4 * CellSize, 3 * CellSize),
 				new Point(1 * CellSize, 7 * CellSize),
 				new Point(0 * CellSize, 6 * CellSize),
 				new Point(2 * CellSize, 6 * CellSize),
-
 				new Point(7 * CellSize, 2 * CellSize),
 				new Point(6 * CellSize, 3 * CellSize),
 				new Point(8 * CellSize, 3 * CellSize),
-
+				new Point(4 * CellSize, 6 * CellSize),
 				new Point(7 * CellSize, 7 * CellSize),
 				new Point(6 * CellSize, 6 * CellSize),
 				new Point(8 * CellSize, 6 * CellSize),
@@ -148,86 +148,125 @@ namespace WinFormsApp
 			for (int i = 0; i < points.Length; i++)
 			{
 				int cell = CellSize / 2;
-				int px = points[i].X;
-				int py = points[i].Y;
-				ctx.DrawCurve(pen, new PointF[3]
+				int px = points[i].X + delta;
+				int py = points[i].Y + delta;
+				if (points[i].X == 0)
 				{
-					new PointF(px - cell / 5, py - cell / 2),
-					new PointF(px - cell / 4, py - cell / 4),
-					new PointF(px - cell / 2, py - cell / 5),
-				});
-				ctx.DrawCurve(pen, new PointF[3]
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px + cell / 5, py - cell / 2),
+						new PointF(px + cell / 4, py - cell / 4),
+						new PointF(px + cell / 2, py - cell / 5),
+					});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px + cell / 5, py + cell / 2),
+						new PointF(px + cell / 4, py + cell / 4),
+						new PointF(px + cell / 2, py + cell / 5),
+					});
+				}
+				else if (points[i].X == 8 * CellSize)
 				{
-					new PointF(px + cell / 5, py - cell / 2),
-					new PointF(px + cell / 4, py - cell / 4),
-					new PointF(px + cell / 2, py - cell / 5),
-				});
-				ctx.DrawCurve(pen, new PointF[3]
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px - cell / 5, py - cell / 2),
+						new PointF(px - cell / 4, py - cell / 4),
+						new PointF(px - cell / 2, py - cell / 5),
+					});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px - cell / 5, py + cell / 2),
+						new PointF(px - cell / 4, py + cell / 4),
+						new PointF(px - cell / 2, py + cell / 5),
+					});
+				} 
+				else
 				{
-					new PointF(px - cell / 5, py + cell / 2),
-					new PointF(px - cell / 4, py + cell / 4),
-					new PointF(px - cell / 2, py + cell / 5),
-				});
-				ctx.DrawCurve(pen, new PointF[3]
-				{
-					new PointF(px + cell / 5, py + cell / 2),
-					new PointF(px + cell / 4, py + cell / 4),
-					new PointF(px + cell / 2, py + cell / 5),
-				});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px - cell / 5, py - cell / 2),
+						new PointF(px - cell / 4, py - cell / 4),
+						new PointF(px - cell / 2, py - cell / 5),
+					});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px + cell / 5, py - cell / 2),
+						new PointF(px + cell / 4, py - cell / 4),
+						new PointF(px + cell / 2, py - cell / 5),
+					});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px - cell / 5, py + cell / 2),
+						new PointF(px - cell / 4, py + cell / 4),
+						new PointF(px - cell / 2, py + cell / 5),
+					});
+					ctx.DrawCurve(pen, new PointF[3]
+					{
+						new PointF(px + cell / 5, py + cell / 2),
+						new PointF(px + cell / 4, py + cell / 4),
+						new PointF(px + cell / 2, py + cell / 5),
+					});
+				}
 			}
-			ctx.Dispose();
 		}
 
-		private void InitializeChessPieces()
+		private void DrawChessPiece(object? sender, PaintEventArgs e)
 		{
+			if (sender == null)
+			{
+				throw new ArgumentNullException("sender 不存在");
+			}
+			Graphics ctx = e.Graphics;
+			Pen pen = new Pen(Color.White, 1);
+
 			Random random = new Random();
 			List<Chess> chuChessList = new List<Chess>(16);
 			List<Chess> hanChessList = new List<Chess>(16);
-			HashSet<Option> chesses = new HashSet<Option>()
+			List<Option> chesses = new List<Option>()
 			{
-				new Option(name: "将", role: Role.General),
+				new Option(name: "车", role: Role.Chariot),
+				new Option(name: "马", role: Role.Horse),
 				new Option(name: "相", role: Role.Premier),
 				new Option(name: "士", role: Role.Guard),
+				new Option(name: "将", role: Role.General),
+				new Option(name: "士", role: Role.Guard),
+				new Option(name: "相", role: Role.Premier),
 				new Option(name: "马", role: Role.Horse),
 				new Option(name: "车", role: Role.Chariot),
-				new Option(name: "炮", role: Role.Gun),
-				new Option(name: "卒", role: Role.Soldier),
 			};
-			foreach(var item in chesses)
+			for(int index = 0; index < chesses.Count; index++)
 			{
-				if (item.role == Role.General)
-				{
-					Chess chuGeneral = new Chess(random.Next().ToString(), item.name, item.role, Color.Green);
-					chuGeneral.Position = new Location(row: 0, col: 4);
-
-					Chess hanGeneral = new Chess(random.Next().ToString(), item.name, item.role, Color.Yellow);
-					hanGeneral.Position = new Location(row: 9, col: 4);
-
-					chuChessList.Add(chuGeneral);
-					chuChessList.Add(hanGeneral);
-				} 
-				else if (item.role == Role.Soldier)
-				{
-					for(int i = 0; i < 5; i++)
-					{
-						chuChessList.Add(new Chess(random.Next().ToString(), item.name, item.role, Color.Green));
-						hanChessList.Add(new Chess(random.Next().ToString(), item.name, item.role, Color.Yellow));
-					}
-				}
-				else
-				{
-					for (int i = 0; i < 2; i++)
-					{
-						chuChessList.Add(new Chess(random.Next().ToString(), item.name, item.role, Color.Green));
-						hanChessList.Add(new Chess(random.Next().ToString(), item.name, item.role, Color.Yellow));
-					}
-				}
+				Option chess = chesses[index];
+				Chess chuChess = new Chess(random.Next().ToString(), chess.name, chess.role, Color.Green);
+				Chess hanChess = new Chess(random.Next().ToString(), chess.name, chess.role, Color.Orange);
+				chuChess.Position = new Location(rowIndex: 0, colIndex: index);
+				hanChess.Position = new Location(rowIndex: 9, colIndex: index);
+				chuChessList.Add(chuChess);
+				hanChessList.Add(hanChess);
 			}
-		}
 
-		private void DrawChessPiece(string chessName, string imageUrl, Color color)
-		{
-
+			Font font = new Font(new FontFamily("Arial"), 16, FontStyle.Bold);
+			foreach (var chess in chuChessList)
+			{
+				float px = chess.Position.colPos - CellSize / 4 + delta;
+				float py = chess.Position.rowPos - CellSize / 4 + delta;
+				float width = CellSize / 2;
+				float height = CellSize / 2;
+				PointF point = new PointF(px + CellSize / 16, py + CellSize / 8);
+				ctx.FillPie(new SolidBrush(Color.White), px, py, width, height, 0, 360);
+				ctx.DrawString(chess.Name, font, new SolidBrush(chess.Color), point);
+			}
+			foreach (var chess in hanChessList)
+			{
+				float px = chess.Position.colPos - CellSize / 4 + delta;
+				float py = chess.Position.rowPos - CellSize / 4 + delta;
+				float width = CellSize / 2;
+				float height = CellSize / 2;
+				PointF point = new PointF(px + CellSize / 16, py + CellSize / 8);
+				ctx.FillPie(new SolidBrush(Color.White), px, py, width, height, 0, 360);
+				ctx.DrawString(chess.Name, font, new SolidBrush(chess.Color), point);
+			}
+			ctx.Dispose();
 		}
 
 		/*
